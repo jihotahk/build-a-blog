@@ -25,8 +25,19 @@ class Handler(webapp2.RequestHandler):
 
 class MainPage(Handler):
     def get(self):
-        self.write("ascii chan!!!")
+        self.render('base.html')
 
+    def post(self):
+        #get title and post values
+        title = self.request.get('title')
+        blog_post = self.request.get('blog_post')
+
+        #error handling
+        if title and blog_post:
+            self.write('thanks, post saved')
+        else:
+            error = 'We need both title and post content'
+            self.render('base.html', error = error)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage)
