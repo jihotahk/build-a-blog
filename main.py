@@ -28,15 +28,25 @@ class BlogPost(db.Model):
     blog_post = db.TextProperty(required=True)
     created = db.DateTimeProperty(auto_now_add = True)
 
-class MainPage(Handler):
-    #default values for render parameter is empty
-    def render_front(self, title='', blog_post='', error=''):
+class BlogView(Handler):
+    #default values for render parameter is empty (Is this necessary? Perhaps at beginning)
+    def render_blog(self, title='', blog_post=''):
         #create cursor from query
         blogs = db.GqlQuery('SELECT * FROM BlogPost ORDER BY created DESC LIMIT 5')
-        self.render("base.html" , title=title, blog_post = blog_post, error = error, blogs=blogs)
+        self.render("blog.html" , title=title, blog_post = blog_post, blogs=blogs)
 
     def get(self):
-        self.render_front()
+        self.render_blog()
+
+
+
+class NewPost(Handler):
+    #render with error, preserve content if error
+    def render_form(self, title='', blog_post='', error=''):
+        self.render("newpost.html" , title=title, blog_post = blog_post, error=error)
+
+    def get(self):
+        self.render_form()
 
     def post(self):
         #get title and post values
@@ -47,12 +57,14 @@ class MainPage(Handler):
         if title and blog_post:
             post = BlogPost(title = title, blog_post = blog_post)
             post.put()
-
-            self.redirect('/')
+            #redirect to blog view page
+            self.redirect('/blog')
         else:
-            error = 'We need both title and post content'
-            self.render_front(title, blog_post, error)
+            error = 'Please provide both title and content'
+            self.render_form(title, blog_post, error)
+
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage)
+    ('/blog', BlogView,
+     '/newpost', NewPost)
 ], debug=True)

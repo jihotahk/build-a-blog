@@ -59,31 +59,7 @@
 
   <body>
     <h1>My Blog</h1>
-
-    <form method='post'>
-      <label>
-        <div>Title</div>
-        <input type='text' name='title' value ='{{ title }}'/>
-      </label>
-
-      <label>
-        <div>
-          Post
-        </div>
-        <textarea name = 'blog_post'>{{ blog_post }}</textarea>
-      </label>
-      <div class='error'>{{ error }}</div>
-      <input type='submit' value='Submit Post'/>
-    </form>
-
-    <hr />
-
-    {% for blog in blogs %}
-      <div class= 'post'>
-        <div class = 'blog-title'>{{ blog.title }}</div>
-        <div class = 'blog-content'><p>{{ blog.blog_post }}</p></div>
-      </div>
-    {% endfor %}
-
+    {% block content %}
+    {% endblock %}
   </body>
 </html>
