@@ -23,9 +23,20 @@ class Handler(webapp2.RequestHandler):
     def render(self, template, **kw):
         self.write(self.render_str(template, **kw))
 
+class BlogPost(db.Model):
+    title = db.StringProperty(required=True)
+    blog_post = db.TextProperty(required=True)
+    created = db.DateTimeProperty(auto_now_add = True)
+
 class MainPage(Handler):
+    #default values for render parameter is empty
+    def render_front(self, title='', blog_post='', error=''):
+        #create cursor from query
+        blogs = db.GqlQuery('SELECT * FROM BlogPost ORDER BY created DESC LIMIT 5')
+        self.render("base.html" , title=title, blog_post = blog_post, error = error, blogs=blogs)
+
     def get(self):
-        self.render('base.html')
+        self.render_front()
 
     def post(self):
         #get title and post values
@@ -34,10 +45,13 @@ class MainPage(Handler):
 
         #error handling
         if title and blog_post:
-            self.write('thanks, post saved')
+            post = BlogPost(title = title, blog_post = blog_post)
+            post.put()
+
+            self.redirect('/')
         else:
             error = 'We need both title and post content'
-            self.render('base.html', error = error)
+            self.render_front(title, blog_post, error)
 
 app = webapp2.WSGIApplication([
     ('/', MainPage)

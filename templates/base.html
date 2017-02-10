@@ -3,6 +3,58 @@
 <html>
   <head>
     <title>My Blog</title>
+    <style type='text/css'>
+      body{
+        font-family: Lato, sans-serif;
+        font-size: 14px;
+        width: 800px;
+        margin: 0 auto;
+        padding: 10px;
+      }
+
+      .error{
+        color: red;
+      }
+      h1{
+        font-size: 4rem;
+      }
+      label{
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+      }
+
+      input[type=text]{
+        width: 400px;
+        font-size: 2.5rem;
+        padding: 2px;
+      }
+
+      textarea{
+        width: 400px;
+        height: 200px;
+      }
+
+      input[type=submit]{
+        font-size: 1.25rem;
+        margin-bottom: 40px;
+      }
+
+      .post{
+        margin-top: 20px;
+      }
+
+      .blog-title{
+        font-weight: bold;
+        font-size: 2rem;
+      }
+
+      .blog-content{
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 200;
+      }
+    </style>
   </head>
 
   <body>
@@ -11,17 +63,27 @@
     <form method='post'>
       <label>
         <div>Title</div>
-        <input type='text' name='title' />
+        <input type='text' name='title' value ='{{ title }}'/>
       </label>
 
       <label>
         <div>
           Post
         </div>
-        <textarea name = 'art'></textarea>
+        <textarea name = 'blog_post'>{{ blog_post }}</textarea>
       </label>
       <div class='error'>{{ error }}</div>
       <input type='submit' value='Submit Post'/>
     </form>
+
+    <hr />
+
+    {% for blog in blogs %}
+      <div class= 'post'>
+        <div class = 'blog-title'>{{ blog.title }}</div>
+        <div class = 'blog-content'><p>{{ blog.blog_post }}</p></div>
+      </div>
+    {% endfor %}
+
   </body>
 </html>
