@@ -58,7 +58,8 @@ class NewPost(Handler):
             post = BlogPost(title = title, blog_post = blog_post)
             post.put()
             #redirect to blog view page
-            self.redirect('/blog')
+            post_id = '/blog/'+str(post.key().id())
+            self.redirect(post_id)
         else:
             error = 'Please provide both title and content'
             self.render_form(title, blog_post, error)
@@ -72,7 +73,7 @@ class ViewPostHandler(Handler):
             error = "There is no post with that ID"
             self.render('post.html', error = error)
 
-            
+
 app = webapp2.WSGIApplication([
     ('/blog', BlogView),
     ('/newpost', NewPost),
