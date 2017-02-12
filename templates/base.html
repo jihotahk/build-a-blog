@@ -18,6 +18,9 @@
       h1{
         font-size: 4rem;
       }
+      a:link, a:visited, a:hover,a:active{
+        text-decoration: none;
+      }
       label{
         display: block;
         font-size: 1.5rem;
@@ -58,7 +61,8 @@
   </head>
 
   <body>
-    <h1>My Blog</h1>
+    <a href="/blog"><h1>My Blog</h1></a>
+
     {% block content %}
     {% endblock %}
   </body>

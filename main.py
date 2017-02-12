@@ -63,8 +63,13 @@ class NewPost(Handler):
             error = 'Please provide both title and content'
             self.render_form(title, blog_post, error)
 
+class ViewPostHandler(Handler):
+    def get(self, id):
+        post = BlogPost.get_by_id( int(id) )
+        self.render('post.html',title=post.title, blog_post = post.blog_post)
 
 app = webapp2.WSGIApplication([
     ('/blog', BlogView),
-    ('/newpost', NewPost)
+    ('/newpost', NewPost),
+    webapp2.Route('/blog/<id:\d+>', ViewPostHandler)
 ], debug=True)
