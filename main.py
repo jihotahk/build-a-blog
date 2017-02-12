@@ -65,6 +65,6 @@ class NewPost(Handler):
 
 
 app = webapp2.WSGIApplication([
-    ('/blog', BlogView,
-     '/newpost', NewPost)
+    ('/blog', BlogView),
+    ('/newpost', NewPost)
 ], debug=True)
