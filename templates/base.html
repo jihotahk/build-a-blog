@@ -2,11 +2,15 @@
 
 <html>
   <head>
-    <title>My Blog</title>
+    <title>Meow Blog</title>
     <style type='text/css'>
+      *{
+        background-color: #222;
+      }
       body{
         font-family: Lato, sans-serif;
         font-size: 14px;
+        color: #FFF;
         width: 800px;
         margin: 0 auto;
         padding: 10px;
@@ -20,6 +24,7 @@
       }
       a:link, a:visited, a:hover,a:active{
         text-decoration: none;
+        color: #FFF;
       }
       label{
         display: block;
@@ -29,22 +34,26 @@
 
       input[type=text]{
         width: 400px;
-        font-size: 2.5rem;
+        font-size: 1.5rem;
         padding: 2px;
+        background-color: #FFF;
       }
 
       textarea{
         width: 400px;
         height: 200px;
+        background-color: #FFF;
+        font-size: 1.25rem;
       }
 
       input[type=submit]{
-        font-size: 1.25rem;
+        font-size: 1.5rem;
         margin-bottom: 40px;
+        background-color: #F5f5f5;
       }
 
       .post{
-        margin-top: 20px;
+        margin: 40px 0;
       }
 
       .blog-title{
@@ -61,7 +70,7 @@
   </head>
 
   <body>
-    <a href="/blog"><h1>My Blog</h1></a>
+    <a href="/blog"><h1>Meow Blog</h1></a>
 
     {% block content %}
     {% endblock %}
