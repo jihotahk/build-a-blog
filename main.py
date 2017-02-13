@@ -8,6 +8,13 @@ template_dir = os.path.join(os.path.dirname(__file__), "templates")
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                 autoescape = True)
 
+def get_posts(limits, offsets):
+    #return list with at most limit posts
+    limits=int(limits)
+    offsets = int(offsets)
+    postquery = 0
+    return postquery
+
 class Handler(webapp2.RequestHandler):
 
     #convenience function to write whatever
@@ -29,16 +36,11 @@ class BlogPost(db.Model):
     created = db.DateTimeProperty(auto_now_add = True)
 
 class BlogView(Handler):
-    #default values for render parameter is empty (Is this necessary? Perhaps at beginning)
-    def render_blog(self, title='', blog_post=''):
-        #create cursor from query
-        blogs = db.GqlQuery('SELECT * FROM BlogPost ORDER BY created DESC LIMIT 5')
-        self.render("blog.html" , title=title, blog_post = blog_post, blogs=blogs)
 
     def get(self):
-        self.render_blog()
-
-
+        query_text = 'SELECT * FROM BlogPost ORDER BY created DESC LIMIT {0} OFFSET {1}'.format(5, 0)
+        blogs = db.GqlQuery(query_text)
+        self.render('blog.html', blogs=blogs)
 
 class NewPost(Handler):
     #render with error, preserve content if error
@@ -57,11 +59,12 @@ class NewPost(Handler):
         if title and blog_post:
             post = BlogPost(title = title, blog_post = blog_post)
             post.put()
-            #redirect to blog view page
+            #redirect to blog permalink page
             post_id = '/blog/'+str(post.key().id())
             self.redirect(post_id)
         else:
             error = 'Please provide both title and content'
+            #preserve content, re-render with error message
             self.render_form(title, blog_post, error)
 
 class ViewPostHandler(Handler):
