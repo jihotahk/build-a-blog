@@ -8,12 +8,11 @@ template_dir = os.path.join(os.path.dirname(__file__), "templates")
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
                                 autoescape = True)
 
-def get_posts(limits, offsets):
+def get_posts(limit, offset):
     #return list with at most limit posts
-    limits=int(limits)
-    offsets = int(offsets)
-    postquery = 0
-    return postquery
+    query_text = 'SELECT * FROM BlogPost ORDER BY created DESC LIMIT {0} OFFSET {1}'.format(limit, offset)
+    posts = db.GqlQuery(query_text)
+    return posts
 
 class Handler(webapp2.RequestHandler):
 
@@ -37,10 +36,19 @@ class BlogPost(db.Model):
 
 class BlogView(Handler):
 
-    def get(self):
-        query_text = 'SELECT * FROM BlogPost ORDER BY created DESC LIMIT {0} OFFSET {1}'.format(5, 0)
-        blogs = db.GqlQuery(query_text)
+    def render_post(self):
+        limit = 5
+        page = 1#self.request.get('page')
+        if page:
+            page = int(page)
+        else:
+            page = 1
+        offset = (page-1)*limit
+        blogs = get_posts(limit, offset)
         self.render('blog.html', blogs=blogs)
+
+    def get(self):
+        self.render_post()
 
 class NewPost(Handler):
     #render with error, preserve content if error
