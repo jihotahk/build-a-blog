@@ -10,4 +10,15 @@
     <div class = 'blog-content'><p>{{ blog.blog_post }}</p></div>
   </div>
 {% endfor %}
+
+<div class='page-buttons'>
+{% if offset > 0 %}
+  <a href="/blog?page={{ page-1 }}">&lt; Prev</a>
+{% endif %}
+
+{% if blogs.count(offset=offset+limit, limit=limit) >0  %}
+  <a href ="/blog?page={{ page+1 }}">Next &gt;</a>
+{% endif %}
+</div>
+
 {% endblock %}

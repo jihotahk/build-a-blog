@@ -29,6 +29,12 @@ class Handler(webapp2.RequestHandler):
     def render(self, template, **kw):
         self.write(self.render_str(template, **kw))
 
+    def renderError(self, error_code):
+        """ Sends an HTTP error code and a generic "oops!" message to the client. """
+
+        self.error(error_code)
+        self.response.write("Oops! Something went wrong.")
+
 class BlogPost(db.Model):
     title = db.StringProperty(required=True)
     blog_post = db.TextProperty(required=True)
@@ -36,16 +42,15 @@ class BlogPost(db.Model):
 
 class BlogView(Handler):
 
-    def render_blog(self):
-        limit = 5
+    def render_blog(self, limit=5):
         page = self.request.get('page')
-        if page:
+        if page and page!='':
             page = int(page)
         else:
-            page = 1
+            page=1
         offset = (page-1)*limit
         blogs = get_posts(limit, offset)
-        self.render('blog.html', blogs=blogs)
+        self.render('blog.html', blogs=blogs, limit = limit, offset = offset, page=page)
 
     def get(self):
         self.render_blog()
