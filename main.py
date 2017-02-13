@@ -36,9 +36,9 @@ class BlogPost(db.Model):
 
 class BlogView(Handler):
 
-    def render_post(self):
+    def render_blog(self):
         limit = 5
-        page = 1#self.request.get('page')
+        page = self.request.get('page')
         if page:
             page = int(page)
         else:
@@ -48,7 +48,7 @@ class BlogView(Handler):
         self.render('blog.html', blogs=blogs)
 
     def get(self):
-        self.render_post()
+        self.render_blog()
 
 class NewPost(Handler):
     #render with error, preserve content if error
